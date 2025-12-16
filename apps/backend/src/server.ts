@@ -5,6 +5,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import { authRouter } from "./routes/auth.js";
 import { meRouter } from "./routes/me.js";
+import { onboardingRouter } from "./routes/onboarding.js";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use("/api/auth", authRouter);
 app.use("/api/me", meRouter);
+app.use("/api/onboarding", onboardingRouter);
 
 app.get("/health", (req, res) => res.json({ ok: true }));
 
