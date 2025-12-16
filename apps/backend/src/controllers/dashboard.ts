@@ -1,5 +1,6 @@
 import { prisma } from "../db/prisma.js";
 import { fetchPricesUSD } from "../services/coingecko.js";
+import { fetchNews } from "../services/cryptopanic.js";
 
 type Section = "NEWS" | "PRICES" | "INSIGHT" | "MEME";
 
@@ -50,19 +51,33 @@ export async function getDashboard(req: any, res: any) {
     }));
   }
 
-  // Placeholders for now
-  const news = contentTypes.includes("news")
-    ? [
+  // Market News
+  let news: Array<{
+    itemId: string;
+    title: string;
+    url: string;
+    source: string | null;
+    publishedAt: string;
+  }> = [];
+
+  if (contentTypes.includes("news")) {
+    try {
+      news = await fetchNews(assets, 10);
+    } catch {
+      // fallback if API fails
+      news = [
         {
-          itemId: "news:placeholder-1",
-          title: "News section placeholder",
-          url: "https://example.com",
-          source: "placeholder",
+          itemId: "news:fallback-1",
+          title: "Could not load live news right now.",
+          url: "https://cryptopanic.com/",
+          source: "fallback",
           publishedAt: new Date().toISOString(),
         },
-      ]
-    : [];
+      ];
+    }
+  }
 
+  // Placeholders for now
   const insight = contentTypes.includes("ai")
     ? {
         itemId: `insight:${new Date().toISOString().slice(0, 10)}`,
