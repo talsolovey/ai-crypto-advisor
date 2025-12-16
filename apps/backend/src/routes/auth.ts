@@ -5,12 +5,14 @@ import { hashPassword, verifyPassword, signToken } from "../utils/auth.js";
 
 export const authRouter = Router();
 
+// Schema for signup validation
 const signupSchema = z.object({
   name: z.string().min(1),
   email: z.email(),
   password: z.string().min(6),
 });
 
+// User signup route
 authRouter.post("/signup", async (req, res) => {
   const parsed = signupSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid input" });
@@ -31,11 +33,13 @@ authRouter.post("/signup", async (req, res) => {
   res.json({ token, user });
 });
 
+// Schema for login validation
 const loginSchema = z.object({
   email: z.email(),
   password: z.string().min(1),
 });
 
+// User login route
 authRouter.post("/login", async (req, res) => {
   const parsed = loginSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid input" });

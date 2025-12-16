@@ -5,12 +5,14 @@ import { requireAuth, type AuthedRequest } from "../middleware/requireAuth.js";
 
 export const onboardingRouter = Router();
 
+// Schema for onboarding preferences
 const onboardingSchema = z.object({
   assets: z.array(z.string().min(1)).min(1),
   investorType: z.string().min(1),
   contentTypes: z.array(z.string().min(1)).min(1),
 });
 
+// Save or update onboarding preferences for authenticated user
 onboardingRouter.post("/", requireAuth, async (req: AuthedRequest, res) => {
   const parsed = onboardingSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid input" });
@@ -42,6 +44,7 @@ onboardingRouter.post("/", requireAuth, async (req: AuthedRequest, res) => {
   });
 });
 
+// Get onboarding preferences for authenticated user
 onboardingRouter.get("/preferences", requireAuth, async (req: AuthedRequest, res) => {
   const pref = await prisma.preference.findUnique({
     where: { userId: req.userId! },

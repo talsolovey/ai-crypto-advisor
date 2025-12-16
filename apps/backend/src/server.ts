@@ -10,14 +10,19 @@ import { onboardingRouter } from "./routes/onboarding.js";
 dotenv.config();
 
 const app = express();
+
+// Middleware setup
 app.use(helmet());
 app.use(cors({ origin: process.env.WEB_ORIGIN }));
 app.use(express.json());
 app.use(morgan("dev"));
+
+// API routes
 app.use("/api/auth", authRouter);
 app.use("/api/me", meRouter);
 app.use("/api/onboarding", onboardingRouter);
 
+// Health check endpoint
 app.get("/health", (req, res) => res.json({ ok: true }));
 
 app.listen(4000, () => console.log("Backend running on http://localhost:4000"));

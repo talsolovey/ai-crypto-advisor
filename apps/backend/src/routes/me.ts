@@ -4,6 +4,7 @@ import { requireAuth, type AuthedRequest } from "../middleware/requireAuth.js";
 
 export const meRouter = Router();
 
+// Returns current authenticated user info and onboarding status
 meRouter.get("/", requireAuth, async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.userId! },
