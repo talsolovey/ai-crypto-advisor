@@ -13,6 +13,5 @@ meRouter.get("/", requireAuth, async (req: AuthedRequest, res) => {
   if (!user) return res.status(404).json({ error: "User not found" });
   const onboardingCompleted = Boolean(user?.preference);
 
-  // Preferences + onboarding status to be added here.
   res.json({ user: { id: user!.id, name: user!.name, email: user!.email }, onboardingCompleted });
 });
