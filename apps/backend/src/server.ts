@@ -7,6 +7,7 @@ import { authRouter } from "./routes/auth.js";
 import { meRouter } from "./routes/me.js";
 import { onboardingRouter } from "./routes/onboarding.js";
 import { dashboardRouter } from "./routes/dashboard.js";
+import { votesRouter } from "./routes/votes.js";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/me", meRouter);
 app.use("/api/onboarding", onboardingRouter);
 app.use("/api/dashboard", dashboardRouter);
+app.use("/api/votes", votesRouter);
 
 // Health check endpoint
 app.get("/health", (req, res) => res.json({ ok: true }));
