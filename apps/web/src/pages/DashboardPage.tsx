@@ -72,11 +72,18 @@ export default function DashboardPage() {
       const res = await getDashboard();
       setData(res);
     } catch (e: any) {
-      setError(e?.message ?? "Failed to load dashboard");
+      const msg = e?.message ?? "Failed to load dashboard";
+
+      if (msg.toLowerCase().includes("onboarding")) {
+        logout();
+        return;
+      }
+      setError(msg);
     } finally {
       setLoading(false);
     }
-  }
+}
+
 
   useEffect(() => {
     load();
