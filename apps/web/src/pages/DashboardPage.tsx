@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { getDashboard, vote, unvote, logout as apiLogout } from "../api/endpoints";
 import type { DashboardResponse } from "../api/types";
 import { useAuth } from "../auth/AuthProvider";
+import Card from "../components/Card";
+import Button from "../components/Button";
+
 
 type SectionKey = "NEWS" | "PRICES" | "INSIGHT" | "MEME";
 
@@ -46,12 +49,12 @@ function VoteButtons(props: {
 
   return (
     <div style={{ display: "flex", gap: 8 }}>
-      <button type="button" onClick={onUp} aria-pressed={myVote === 1}>
+      <Button type="button" onClick={onUp} pressed={myVote === 1}>
         👍 {myVote === 1 ? "Upvoted" : "Upvote"}
-      </button>
-      <button type="button" onClick={onDown} aria-pressed={myVote === -1}>
+      </Button>
+      <Button type="button" onClick={onDown} pressed={myVote === -1}>
         👎 {myVote === -1 ? "Downvoted" : "Downvote"}
-      </button>
+      </Button>
     </div>
   );
 }
@@ -150,16 +153,16 @@ export default function DashboardPage() {
   }
 
   return (
+    <div className="container">
     <div style={{ maxWidth: 900, margin: "32px auto", padding: 16 }}>
       <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1 style={{ margin: 0 }}>Daily Dashboard</h1>
-        <button onClick={onLogout}>Logout</button>
+        <Button onClick={onLogout} variant="primary">Logout</Button>
       </header>
 
       <div style={{ display: "grid", gap: 16, marginTop: 16 }}>
         {/* 1) Market News */}
-        <section style={{ border: "1px solid #ddd", borderRadius: 10, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>Market News</h2>
+        <Card title="Market News">
           {news.length === 0 ? (
             <div>— No news items.</div>
           ) : (
@@ -184,12 +187,10 @@ export default function DashboardPage() {
               ))}
             </div>
           )}
-        </section>
+        </Card>
 
         {/* 2) Coin Prices */}
-        <section style={{ border: "1px solid #ddd", borderRadius: 10, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>Coin Prices</h2>
-
+        <Card title="Coin Prices">
           {prices.length === 0 ? (
             <div>— No prices.</div>
           ) : (
@@ -220,11 +221,10 @@ export default function DashboardPage() {
               ))}
             </div>
           )}
-        </section>
+        </Card>
 
         {/* 3) AI Insight */}
-        <section style={{ border: "1px solid #ddd", borderRadius: 10, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>AI Insight of the Day</h2>
+        <Card title="AI Insight of the Day">
           {!insight ? (
             <div>— No insight today.</div>
           ) : (
@@ -238,11 +238,10 @@ export default function DashboardPage() {
               />
             </>
           )}
-        </section>
+        </Card>
 
         {/* 4) Meme */}
-        <section style={{ border: "1px solid #ddd", borderRadius: 10, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>Fun Crypto Meme</h2>
+        <Card title="Fun Crypto Meme">
           {!meme ? (
             <div>— No meme today.</div>
           ) : (
@@ -263,12 +262,13 @@ export default function DashboardPage() {
               </div>
             </>
           )}
-        </section>
+        </Card>
 
-        <button onClick={load} style={{ padding: 10 }}>
+        <Button onClick={load} style={{ padding: 10 }}>
           Refresh dashboard
-        </button>
+        </Button>
       </div>
+    </div>
     </div>
   );
 }

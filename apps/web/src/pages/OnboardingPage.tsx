@@ -107,7 +107,7 @@ export default function OnboardingPage() {
       <form onSubmit={onSubmit} style={{ display: "grid", gap: 20, marginTop: 20 }}>
         {/* Assets */}
         <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>1) Favorite crypto assets</h2>
+          <h2 style={{ marginTop: 0 }}>1 Favorite crypto assets</h2>
           <div style={{ display: "grid", gap: 8 }}>
             {ASSET_OPTIONS.map((opt) => (
               <label key={opt.id} style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -127,7 +127,7 @@ export default function OnboardingPage() {
 
         {/* Investor type */}
         <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>2) Investor type</h2>
+          <h2 style={{ marginTop: 0 }}>2 Investor type</h2>
           <select
             value={investorType}
             onChange={(e) => setInvestorType(e.target.value)}
@@ -147,7 +147,7 @@ export default function OnboardingPage() {
 
         {/* Content types */}
         <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>3) Content types for your dashboard</h2>
+          <h2 style={{ marginTop: 0 }}>3 Content types for your dashboard</h2>
           <div style={{ display: "grid", gap: 8 }}>
             {CONTENT_TYPES.map((opt) => (
               <label key={opt.id} style={{ display: "flex", gap: 10, alignItems: "center" }}>
