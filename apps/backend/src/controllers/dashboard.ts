@@ -2,6 +2,7 @@ import { prisma } from "../db/prisma.js";
 import { fetchPricesUSD } from "../services/coingecko.js";
 import { fetchNews } from "../services/cryptopanic.js";
 import { generateInsightText } from "../services/openrouter.js";
+import { getRandomMeme } from "../services/memes.js";
 
 type Section = "NEWS" | "PRICES" | "INSIGHT" | "MEME";
 
@@ -121,15 +122,9 @@ export async function getDashboard(req: any, res: any) {
     }
   }
 
+  const wantsMemes = contentTypes.includes("meme");
 
-  // placeholder
-  const meme = contentTypes.includes("meme")
-    ? {
-        itemId: "meme:placeholder-1",
-        title: "HODL mode: ON",
-        imageUrl: "https://i.imgflip.com/1bij.jpg",
-      }
-    : null;
+  const meme = wantsMemes ? getRandomMeme() : null;
 
   // Collect itemIds per section (for one efficient votes query)
   const priceItemIds = prices.map((p) => p.itemId);
