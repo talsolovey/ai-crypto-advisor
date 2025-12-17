@@ -1,6 +1,7 @@
 import { prisma } from "../db/prisma.js";
 import { fetchPricesUSD } from "../services/coingecko.js";
 import { fetchNews } from "../services/cryptopanic.js";
+import { generateInsightText } from "../services/openrouter.js";
 
 type Section = "NEWS" | "PRICES" | "INSIGHT" | "MEME";
 
@@ -77,14 +78,51 @@ export async function getDashboard(req: any, res: any) {
     }
   }
 
-  // Placeholders for now
-  const insight = contentTypes.includes("ai")
-    ? {
-        itemId: `insight:${new Date().toISOString().slice(0, 10)}`,
-        text: `Placeholder insight for ${pref.investorType}.`,
-      }
-    : null;
+  // Daily Insight
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
+  let insight: { itemId: string; text: string } | null = null;
+
+  if (contentTypes.includes("insight")) {
+    const cached = await prisma.dailyInsight.findUnique({
+      where: { userId_date: { userId, date: today } },
+      select: { text: true },
+    });
+
+    if (cached?.text) {
+      insight = {
+        itemId: `insight:${today}`,
+        text: cached.text,
+      };
+    } else {
+      let text: string;
+      
+      try {
+        // generate once per day and store
+        text = await generateInsightText({
+          assets,
+          investorType: pref.investorType,
+          contentTypes,
+          date: today,
+        });
+
+      } catch (e) {
+        text = `AI insight unavailable right now. (Try again later)`;
+      }
+
+      if(text != "AI insight unavailable right now. (Try again later)") {
+        await prisma.dailyInsight.create({data: {userId,date: today,text,}});
+      }
+      
+      insight = {
+        itemId: `insight:${today}`,
+        text,
+      };
+    }
+  }
+
+
+  // placeholder
   const meme = contentTypes.includes("meme")
     ? {
         itemId: "meme:placeholder-1",
