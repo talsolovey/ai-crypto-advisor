@@ -3,8 +3,7 @@ import { useAuth } from "./auth/AuthProvider";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import OnboardingPage from "./pages/OnboardingPage";
-
-function DashboardPage() { return <div>Dashboard</div>; }
+import DashboardPage from "./pages/DashboardPage";
 
 function HomeRedirect() {
   const { state } = useAuth();

@@ -45,12 +45,17 @@ export async function unvote(payload: { section: "NEWS" | "PRICES" | "INSIGHT" |
 }
 
 export async function getPreferences() {
-  return apiFetch<PreferencesResponse>("/api/onboarding/preferences", { method: "GET" });
+  const res = await apiFetch<{ preference: PreferencesResponse }>(
+    "/api/onboarding/preferences",
+    { method: "GET" }
+  );
+  return res.preference;
 }
 
 export async function saveOnboarding(payload: SaveOnboardingPayload) {
-  return apiFetch<{ ok: true }>("/api/onboarding", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  const res = await apiFetch<{ preference: PreferencesResponse }>(
+    "/api/onboarding",
+    { method: "POST", body: JSON.stringify(payload) }
+  );
+  return res.preference;
 }

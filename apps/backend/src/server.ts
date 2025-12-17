@@ -15,7 +15,7 @@ const app = express();
 
 // Middleware setup
 app.use(helmet());
-app.use(cors({ origin: process.env.WEB_ORIGIN }));
+app.use(cors({ origin: process.env.WEB_ORIGIN ?? "http://localhost:5173" }));
 app.use(express.json());
 app.use(morgan("dev"));
 
