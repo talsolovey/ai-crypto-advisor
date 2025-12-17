@@ -45,12 +45,16 @@ export async function getDashboard(req: any, res: any) {
   // Coin Prices
   let prices: Array<{ itemId: string; coinId: string; usd: number | null }> = [];
   if (contentTypes.includes("prices")) {
-    const rows = await fetchPricesUSD(assets);
-    prices = rows.map((r) => ({
+    try{
+      const rows = await fetchPricesUSD(assets);
+      prices = rows.map((r) => ({
       itemId: `price:${r.coinId}`,
       coinId: r.coinId,
       usd: r.usd,
     }));
+    } catch (e){
+      console.error("Failed to fetch prices:", e);
+    }
   }
 
   // Market News
@@ -65,8 +69,9 @@ export async function getDashboard(req: any, res: any) {
   if (contentTypes.includes("news")) {
     try {
       news = await fetchNews(assets, 10);
-    } catch {
+    } catch (e){
       // fallback if API fails
+      console.error("Failed to fetch news:", e);
       news = [
         {
           itemId: "news:fallback-1",

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../api/endpoints";
 import { useAuth } from "../auth/AuthProvider";
+import Card from "../components/Card";
+import Button from "../components/Button";
 
 export default function LoginPage() {
   const nav = useNavigate();
@@ -19,9 +21,9 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login({ email, password });   // saves token via client.ts
-      await refreshMe();              // fetch /me and update auth state
-      nav("/", { replace: true });   
+      await login({ email, password });
+      await refreshMe();
+      nav("/", { replace: true });
     } catch (err: any) {
       setError(err?.message ?? "Login failed");
     } finally {
@@ -30,46 +32,59 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ maxWidth: 420, margin: "64px auto", padding: 16 }}>
-      <h1>Login</h1>
-
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
-        <label style={{ display: "grid", gap: 6 }}>
-          Email
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            autoComplete="email"
-            required
-          />
-        </label>
-
-        <label style={{ display: "grid", gap: 6 }}>
-          Password
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            autoComplete="current-password"
-            required
-          />
-        </label>
-
-        <button disabled={loading} type="submit">
-          {loading ? "Logging in..." : "Login"}
-        </button>
-
-        {error && (
-          <div style={{ color: "crimson" }}>
-            {error}
+    <div className="authShell">
+      <div className="card heroCard">
+        <div className="brand" style={{ marginBottom: 14 }}>
+          <div>
+            <div>AI Crypto Advisor</div>
           </div>
-        )}
-      </form>
+        </div>
 
-      <p style={{ marginTop: 16 }}>
-        Don&apos;t have an account? <Link to="/signup">Sign up</Link>
-      </p>
+        <h1 className="heroTitle">Welcome back</h1>
+        <p className="heroLead">
+          Clean dashboard. Tailored news. Daily AI insight. Vote to teach the feed what matters to you.
+        </p>
+      </div>
+
+      <Card title="Log in">
+        <form onSubmit={onSubmit} className="formGrid">
+          <label className="formLabel">
+            <strong>Email</strong>
+            <input
+              className="input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="you@example.com"
+            />
+          </label>
+
+          <label className="formLabel">
+            <strong>Password</strong>
+            <input
+              className="input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              autoComplete="current-password"
+              required
+              placeholder="••••••••"
+            />
+          </label>
+
+          {error && <div className="error">{error}</div>}
+
+          <Button disabled={loading} type="submit" variant="primary">
+            {loading ? "Logging in..." : "Login"}
+          </Button>
+
+          <div className="muted" style={{ marginTop: 4 }}>
+            Don&apos;t have an account? <Link to="/signup">Sign up</Link>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }

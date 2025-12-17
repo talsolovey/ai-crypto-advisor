@@ -1,8 +1,25 @@
-export default function Card(props: { title: string; children: React.ReactNode }) {
+type CardProps = {
+  title: string;
+  subtitle?: string;
+  className?: string;
+  children: React.ReactNode;
+};
+
+export default function Card({
+  title,
+  subtitle,
+  className = "",
+  children,
+}: CardProps) {
   return (
-    <section className="card">
-      <h2 style={{ marginTop: 0 }}>{props.title}</h2>
-      {props.children}
+    <section className={`card ${className}`}>
+      <div className="cardHeader">
+        <div>
+          <h2 className="cardTitle">{title}</h2>
+          {subtitle && <div className="cardSubtitle">{subtitle}</div>}
+        </div>
+      </div>
+      {children}
     </section>
   );
 }

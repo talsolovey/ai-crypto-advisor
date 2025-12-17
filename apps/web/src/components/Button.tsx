@@ -6,8 +6,8 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 export default function Button({ pressed, variant = "default", className, ...rest }: Props) {
   const classes = [
     "btn",
-    variant === "primary" ? "btn-primary" : "",
-    pressed ? "btn-pressed" : "",
+    variant === "primary" ? "btnPrimary" : "",
+    pressed ? "btnPressed" : "",
     className ?? "",
   ]
     .filter(Boolean)

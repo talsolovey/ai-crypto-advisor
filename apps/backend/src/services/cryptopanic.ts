@@ -6,7 +6,7 @@ export type NewsItem = {
   publishedAt: string;
 };
 
-const baseUrl = "https://cryptopanic.com/api/v1";
+const baseUrl = "https://cryptopanic.com/api/developer/v2/posts/";
 
 const COINGECKO_TO_SYMBOL: Record<string, string> = {
   bitcoin: "BTC",
@@ -40,7 +40,7 @@ export async function fetchNews(coinIds: string[], limit = 10): Promise<NewsItem
 
   const symbols = toSymbols(coinIds);
 
-  const url = new URL(`${baseUrl}/posts/`);
+  const url = new URL(baseUrl);
   url.searchParams.set("auth_token", token);
 
   if (symbols.length > 0) {

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signup } from "../api/endpoints";
 import { useAuth } from "../auth/AuthProvider";
+import Card from "../components/Card";
+import Button from "../components/Button";
 
 export default function SignupPage() {
   const nav = useNavigate();
@@ -20,9 +22,9 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      await signup({ name, email, password }); // saves token
-      await refreshMe();                   // fetch /me
-      nav("/", { replace: true });         // go to onboarding/dashboard
+      await signup({ name, email, password });
+      await refreshMe();
+      nav("/", { replace: true });
     } catch (err: any) {
       setError(err?.message ?? "Signup failed");
     } finally {
@@ -31,53 +33,72 @@ export default function SignupPage() {
   }
 
   return (
-    <div style={{ maxWidth: 420, margin: "64px auto", padding: 16 }}>
-      <h1>Sign up</h1>
+    <div className="authShell">
+      <div className="card heroCard">
+        <div className="brand" style={{ marginBottom: 14 }}>
+          <div>
+            <div>AI Crypto Advisor</div>
+          </div>
+        </div>
 
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
-        <label style={{ display: "grid", gap: 6 }}>
-          Name
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            autoComplete="name"
-          />
-        </label>
+        <h1 className="heroTitle">Create your account</h1>
+        <p className="heroLead">
+          Set your watchlist and content preferences once — then get a cleaner dashboard every day.
+        </p>
+      </div>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          Email
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            required
-            autoComplete="email"
-          />
-        </label>
+      <Card title="Sign up">
+        <form onSubmit={onSubmit} className="formGrid">
+          <label className="formLabel">
+            <strong>Name</strong>
+            <input
+              className="input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+              placeholder="Tal"
+            />
+          </label>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          Password
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            required
-            autoComplete="new-password"
-            minLength={6}
-          />
-        </label>
+          <label className="formLabel">
+            <strong>Email</strong>
+            <input
+              className="input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="you@example.com"
+            />
+          </label>
 
-        <button disabled={loading} type="submit">
-          {loading ? "Creating account..." : "Create account"}
-        </button>
+          <label className="formLabel">
+            <strong>Password</strong>
+            <input
+              className="input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              required
+              autoComplete="new-password"
+              minLength={6}
+              placeholder="At least 6 characters"
+            />
+          </label>
 
-        {error && <div style={{ color: "crimson" }}>{error}</div>}
-      </form>
+          {error && <div className="error">{error}</div>}
 
-      <p style={{ marginTop: 16 }}>
-        Already have an account? <Link to="/login">Log in</Link>
-      </p>
+          <Button disabled={loading} type="submit" variant="primary">
+            {loading ? "Creating account..." : "Create account"}
+          </Button>
+
+          <div className="muted" style={{ marginTop: 4 }}>
+            Already have an account? <Link to="/login">Log in</Link>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }

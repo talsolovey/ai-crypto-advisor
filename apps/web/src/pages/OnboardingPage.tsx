@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { getPreferences, saveOnboarding } from "../api/endpoints";
 import { useAuth } from "../auth/AuthProvider";
 import type { PreferencesResponse } from "../api/types";
+import Card from "../components/Card";
+import Button from "../components/Button";
 
 const ASSET_OPTIONS = [
   { id: "bitcoin", label: "Bitcoin (BTC)" },
@@ -12,12 +14,7 @@ const ASSET_OPTIONS = [
   { id: "dogecoin", label: "Dogecoin (DOGE)" },
 ];
 
-const INVESTOR_TYPES = [
-  "HODLer",
-  "Day Trader",
-  "Long-term Investor",
-  "Beginner",
-];
+const INVESTOR_TYPES = ["HODLer", "Day Trader", "Long-term Investor", "Beginner"];
 
 const CONTENT_TYPES = [
   { id: "news", label: "News" },
@@ -42,7 +39,6 @@ export default function OnboardingPage() {
   const [investorType, setInvestorType] = useState<string>("");
   const [contentTypes, setContentTypes] = useState<string[]>([]);
 
-  // Prefill (if backend already has preferences)
   useEffect(() => {
     let cancelled = false;
 
@@ -58,7 +54,6 @@ export default function OnboardingPage() {
         setInvestorType(prefs.investorType ?? "");
         setContentTypes(prefs.contentTypes ?? []);
       } catch {
-        // If none exist yet (or endpoint returns non-200), just start with empty defaults
         if (cancelled) return;
       } finally {
         if (!cancelled) setLoading(false);
@@ -84,8 +79,8 @@ export default function OnboardingPage() {
 
     try {
       await saveOnboarding({ assets, investorType, contentTypes });
-      await refreshMe();              // updates onboardingCompleted in /me
-      nav("/", { replace: true });    // HomeRedirect sends to /dashboard
+      await refreshMe();
+      nav("/", { replace: true });
     } catch (err: any) {
       setError(err?.message ?? "Failed to save preferences");
     } finally {
@@ -93,83 +88,90 @@ export default function OnboardingPage() {
     }
   }
 
-  if (loading) {
-    return <div style={{ padding: 24 }}>Loading onboarding...</div>;
-  }
+  if (loading) return <div className="container">Loading onboarding...</div>;
 
   return (
-    <div style={{ maxWidth: 640, margin: "48px auto", padding: 16 }}>
-      <h1>Onboarding</h1>
-      <p style={{ marginTop: 6 }}>
-        Choose your preferences so your dashboard is personalized.
-      </p>
-
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 20, marginTop: 20 }}>
-        {/* Assets */}
-        <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>1 Favorite crypto assets</h2>
-          <div style={{ display: "grid", gap: 8 }}>
-            {ASSET_OPTIONS.map((opt) => (
-              <label key={opt.id} style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                <input
-                  type="checkbox"
-                  checked={assets.includes(opt.id)}
-                  onChange={() => setAssets((prev) => toggleInArray(prev, opt.id))}
-                />
-                {opt.label}
-              </label>
-            ))}
+    <div className="container">
+      <div className="card" style={{ marginBottom: 16 }}>
+        <div className="cardHeader">
+          <div>
+            <h1 className="cardTitle" style={{ fontSize: 22 }}>Personalize your dashboard</h1>
+            <div className="cardSubtitle">
+              Pick what you care about — we'll tailor news, prices, and insight around it.
+            </div>
           </div>
-          {assets.length === 0 && (
-            <div style={{ color: "crimson", marginTop: 8 }}>Pick at least one asset.</div>
-          )}
-        </section>
+        </div>
+      </div>
 
-        {/* Investor type */}
-        <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>2 Investor type</h2>
-          <select
-            value={investorType}
-            onChange={(e) => setInvestorType(e.target.value)}
-            style={{ width: "100%", padding: 8 }}
-          >
-            <option value="">Select one...</option>
-            {INVESTOR_TYPES.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-          {!investorType && (
-            <div style={{ color: "crimson", marginTop: 8 }}>Choose an investor type.</div>
-          )}
-        </section>
+      <form onSubmit={onSubmit} className="grid">
+        <div className="vstack">
+          <Card title="1) Favorite crypto assets">
+            <div className="muted" style={{ marginBottom: 10 }}>
+              Choose at least one asset for your watchlist.
+            </div>
 
-        {/* Content types */}
-        <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16 }}>
-          <h2 style={{ marginTop: 0 }}>3 Content types for your dashboard</h2>
-          <div style={{ display: "grid", gap: 8 }}>
-            {CONTENT_TYPES.map((opt) => (
-              <label key={opt.id} style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                <input
-                  type="checkbox"
-                  checked={contentTypes.includes(opt.id)}
-                  onChange={() => setContentTypes((prev) => toggleInArray(prev, opt.id))}
-                />
-                {opt.label}
-              </label>
-            ))}
-          </div>
-          {contentTypes.length === 0 && (
-            <div style={{ color: "crimson", marginTop: 8 }}>Pick at least one content type.</div>
-          )}
-        </section>
+            <div className="list">
+              {ASSET_OPTIONS.map((opt) => (
+                <label key={opt.id} className="listItem" style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={assets.includes(opt.id)}
+                    onChange={() => setAssets((prev) => toggleInArray(prev, opt.id))}
+                  />
+                  <span style={{ fontWeight: 650 }}>{opt.label}</span>
+                </label>
+              ))}
+            </div>
 
-        {error && <div style={{ color: "crimson" }}>{error}</div>}
+            {assets.length === 0 && <div className="error" style={{ marginTop: 10 }}>Pick at least one asset.</div>}
+          </Card>
 
-        <button disabled={!canSubmit || saving} type="submit" style={{ padding: 10 }}>
-          {saving ? "Saving..." : "Save & Continue"}
-        </button>
+          <Card title="2) Content types">
+            <div className="muted" style={{ marginBottom: 10 }}>
+              Decide what shows up on your dashboard.
+            </div>
+
+            <div className="list">
+              {CONTENT_TYPES.map((opt) => (
+                <label key={opt.id} className="listItem" style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={contentTypes.includes(opt.id)}
+                    onChange={() => setContentTypes((prev) => toggleInArray(prev, opt.id))}
+                  />
+                  <span style={{ fontWeight: 650 }}>{opt.label}</span>
+                </label>
+              ))}
+            </div>
+
+            {contentTypes.length === 0 && <div className="error" style={{ marginTop: 10 }}>Pick at least one content type.</div>}
+          </Card>
+
+          <Card title="3) Investor type">
+            <div className="muted" style={{ marginBottom: 10 }}>
+              Used to tune the tone of insights.
+            </div>
+
+            <select
+              value={investorType}
+              onChange={(e) => setInvestorType(e.target.value)}
+              style={{ width: "100%" }}
+            >
+              <option value="">Select one...</option>
+              {INVESTOR_TYPES.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+
+            {!investorType && <div className="error" style={{ marginTop: 10 }}>Choose an investor type.</div>}
+          </Card>
+
+          {error && <div className="error">{error}</div>}
+
+          <Button disabled={!canSubmit || saving} type="submit" variant="primary">
+            {saving ? "Saving..." : "Save & Continue"}
+          </Button>
+        </div>
       </form>
     </div>
   );
