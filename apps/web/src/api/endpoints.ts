@@ -1,5 +1,6 @@
 import { apiFetch, setToken, clearToken } from "./client";
 import type { MeResponse, DashboardResponse } from "./types";
+import type { PreferencesResponse, SaveOnboardingPayload } from "./types";
 
 export async function signup(payload: { name: string; email: string; password: string }) {
   return apiFetch<{ ok: true }>("/api/auth/signup", {
@@ -39,6 +40,17 @@ export async function vote(payload: { section: "NEWS" | "PRICES" | "INSIGHT" | "
 export async function unvote(payload: { section: "NEWS" | "PRICES" | "INSIGHT" | "MEME"; itemId: string }) {
   return apiFetch<{ ok: true }>("/api/votes", {
     method: "DELETE",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getPreferences() {
+  return apiFetch<PreferencesResponse>("/api/onboarding/preferences", { method: "GET" });
+}
+
+export async function saveOnboarding(payload: SaveOnboardingPayload) {
+  return apiFetch<{ ok: true }>("/api/onboarding", {
+    method: "POST",
     body: JSON.stringify(payload),
   });
 }

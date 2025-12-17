@@ -32,3 +32,11 @@ export type DashboardResponse = {
     };
   };
 };
+
+export type PreferencesResponse = {
+  assets: string[];        // e.g. ["bitcoin","ethereum"]
+  investorType: string;    // e.g. "HODLer"
+  contentTypes: string[];  // e.g. ["news","charts"]
+};
+
+export type SaveOnboardingPayload = PreferencesResponse;

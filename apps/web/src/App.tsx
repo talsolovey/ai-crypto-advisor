@@ -2,8 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./auth/AuthProvider";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import OnboardingPage from "./pages/OnboardingPage";
 
-function OnboardingPage() { return <div>Onboarding</div>; }
 function DashboardPage() { return <div>Dashboard</div>; }
 
 function HomeRedirect() {

@@ -21,7 +21,7 @@ export default function LoginPage() {
     try {
       await login({ email, password });   // saves token via client.ts
       await refreshMe();              // fetch /me and update auth state
-      nav("/", { replace: true });    // HomeRedirect will route correctly
+      nav("/", { replace: true });   
     } catch (err: any) {
       setError(err?.message ?? "Login failed");
     } finally {
