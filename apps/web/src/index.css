@@ -41,6 +41,15 @@
 
   --shadow-hover:
     0 16px 40px rgba(0,0,0,0.55);
+
+  --container: 1100px;
+
+  --muted: var(--text-muted);
+  --muted-2: var(--text-secondary);
+
+  --border: var(--border-default);
+  --text: var(--text-primary);
+  --focus: var(--focus-ring);
 }
 
 
@@ -64,8 +73,14 @@ body {
 }
 
 
-a { color: inherit; text-decoration: none; }
-a:hover { text-decoration: underline; }
+a { 
+  color: inherit; 
+  text-decoration: none;
+ }
+
+a:hover { 
+  text-decoration: underline; 
+}
 
 .container {
   max-width: var(--container);
@@ -180,10 +195,6 @@ a:hover { text-decoration: underline; }
 .cardSubtitle,
 .muted {
   color: rgba(255,255,255,0.55);
-}
-
-a {
-  color: rgba(255,255,255,0.95);
 }
 
 a:hover {
@@ -499,6 +510,7 @@ select option { color: #0b0f1a; }
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.07);
   align-items: flex-start;
+  position: relative;
 }
 
 .newsItem:hover {
@@ -543,10 +555,6 @@ select option { color: #0b0f1a; }
   margin-top: 2px;
 }
 
-.newsItem {
-  position: relative;
-}
-
 .newsItem::before {
   content: "";
   position: absolute;
@@ -560,6 +568,39 @@ select option { color: #0b0f1a; }
 
 .newsItem:hover::before {
   background: rgba(56,189,248,0.55);
+}
+
+.insightBox {
+  display: grid;
+  gap: 12px;
+}
+
+.insightList {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: rgba(255,255,255,0.86);
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+.insightRisk {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(239,68,68,0.22);
+  background: rgba(239,68,68,0.08);
+  color: rgba(255,255,255,0.88);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.insightRiskLabel {
+  font-weight: 750;
+  color: rgba(255,255,255,0.92);
+  flex: 0 0 auto;
 }
 
 

@@ -6,7 +6,6 @@ export type PriceRow = {
 
 const baseUrl = process.env.COINGECKO_BASE_URL ?? "https://api.coingecko.com/api/v3";
 
-
 // Fetches USD prices for given coin IDs from CoinGecko
 export async function fetchPricesUSD(coinIds: string[]): Promise<PriceRow[]> {
   const ids = coinIds

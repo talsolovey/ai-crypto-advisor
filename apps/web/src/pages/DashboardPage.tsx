@@ -52,6 +52,30 @@ function VoteButtons(props: {
   );
 }
 
+function InsightBlock({ text }: { text: string }) {
+  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  const bullets = lines.filter((l) => l.startsWith("- ")).map((l) => l.slice(2));
+  const riskLine = lines.find((l) => l.toLowerCase().startsWith("risk:"));
+  const risk = riskLine ? riskLine.slice(5).trim() : null;
+
+  return (
+    <div className="insightBox">
+      <ul className="insightList">
+        {bullets.map((b, i) => (
+          <li key={i}>{b}</li>
+        ))}
+      </ul>
+
+      {risk && (
+        <div className="insightRisk">
+          <span className="insightRiskLabel">Risk</span>
+          <span>{risk}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const { logout } = useAuth();
   const [data, setData] = useState<DashboardResponse | null>(null);
@@ -164,7 +188,7 @@ export default function DashboardPage() {
           <div className="vstack">
             {enabled.has("news") && (
             <Card title="Market News" className="card-strong">
-              <div className="muted" style={{ marginBottom: 10 }}>
+              <div className="cardSubtitle" style={{ marginBottom: 10 }}>
                 Headlines tailored to your preferences
               </div>
 
@@ -212,7 +236,7 @@ export default function DashboardPage() {
           <div className="vstack stickyCol">
             {enabled.has("prices") && (
             <Card title="Coin Prices" className="card-strong">
-              <div className="muted" style={{ marginBottom: 10 }}>
+              <div className="cardSubtitle" style={{ marginBottom: 10 }}>
                 Quick snapshot (USD)
               </div>
 
@@ -243,7 +267,7 @@ export default function DashboardPage() {
 
             {enabled.has("insight") && (
             <Card title="Daily Insight" className="card-strong">
-              <div className="muted" style={{ marginBottom: 10 }}>
+              <div className="cardSubtitle" style={{ marginBottom: 10 }}>
                 A short, actionable daily takeaway
               </div>
 
@@ -251,7 +275,7 @@ export default function DashboardPage() {
                 <div className="muted">— No insight today.</div>
               ) : (
                 <div style={{ display: "grid", gap: 12 }}>
-                  <div style={{ lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{insight.text}</div>
+                  <InsightBlock text={insight.text} />
                   <VoteButtons
                     section="INSIGHT"
                     itemId={insight.itemId}
@@ -265,12 +289,12 @@ export default function DashboardPage() {
 
             {enabled.has("meme") && (
             <Card title="Fun Meme" className="card-strong">
-              <div className="muted" style={{ marginBottom: 10 }}>
+              <div className="cardSubtitle" style={{ marginBottom: 10 }}>
                 Because markets are emotional 🙂
               </div>
 
               {!meme ? (
-                <div className="muted">— No meme today.</div>
+                <div className="cardSubtitle">— No meme today.</div>
               ) : (
                 <div style={{ display: "grid", gap: 12 }}>
                   <img

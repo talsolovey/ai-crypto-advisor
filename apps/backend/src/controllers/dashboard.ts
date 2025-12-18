@@ -61,8 +61,6 @@ export async function getDashboard(req: any, res: any) {
   let news: Array<{
     itemId: string;
     title: string;
-    url: string;
-    source: string | null;
     publishedAt: string;
     snippet?: string;
   }> = [];
@@ -77,19 +75,9 @@ export async function getDashboard(req: any, res: any) {
         {
           itemId: "news:fallback-1",
           title: "Live news is temporarily unavailable (CryptoPanic 502).",
-          url: "https://cryptopanic.com/",
-          source: "CryptoPanic",
           publishedAt: new Date().toISOString(),
           snippet: "You can still browse headlines directly on CryptoPanic while we retry.",
-        },
-        {
-          itemId: "news:fallback-2",
-          title: "Open CryptoPanic news feed",
-          url: "https://cryptopanic.com/",
-          source: "fallback",
-          publishedAt: new Date().toISOString(),
-          snippet: "Click to view the full feed in a new tab.",
-        },
+        }
       ];
     }
   }
