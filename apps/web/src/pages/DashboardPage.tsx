@@ -85,6 +85,16 @@ export default function DashboardPage() {
   const insight = data?.sections.insight ?? null;
   const meme = data?.sections.meme ?? null;
 
+  const enabled = useMemo(() => {
+    const set = new Set<string>();
+    if (news.length > 0) set.add("news");
+    if (prices.length > 0) set.add("prices");
+    if (insight) set.add("insight");
+    if (meme) set.add("meme");
+    return set;
+  }, [news, prices, insight, meme]);
+
+
   function setItemVote(section: SectionKey, itemId: string, next: 1 | -1 | null) {
     setData((prev) => {
       if (!prev) return prev;
@@ -152,6 +162,7 @@ export default function DashboardPage() {
         <div className="grid2">
           {/* Left: News */}
           <div className="vstack">
+            {enabled.has("news") && (
             <Card title="Market News" className="card-strong">
               <div className="muted" style={{ marginBottom: 10 }}>
                 Headlines tailored to your preferences
@@ -161,31 +172,45 @@ export default function DashboardPage() {
                 <div className="muted">— No news items.</div>
               ) : (
                 <div className="list">
-                  {news.map((n) => (
-                    <div key={n.itemId} className="listItem">
-                      <div style={{ display: "grid", gap: 6 }}>
-                        <a href={n.url} target="_blank" rel="noreferrer" style={{ fontWeight: 700, lineHeight: 1.35 }}>
-                          {n.title}
-                        </a>
-                        <div className="muted">
-                          {n.source ?? "Unknown source"} • {new Date(n.publishedAt).toLocaleString()}
+                  {news.map((n) => {
+                    return (
+                      <div key={n.itemId} className="newsItem">
+                        <div className="newsMain">
+                          <div className="newsTitleRow">
+                            <div className="newsTitle">{n.title}</div>
+                          </div>
+
+                          {n.snippet && <div className="newsSnippet">{n.snippet}</div>}
+
+                          <div className="newsMeta">
+                            <a href="https://cryptopanic.com" target="_blank" rel="noreferrer">
+                              CryptoPanic
+                            </a>
+                            {" • "}
+                            {new Date(n.publishedAt).toLocaleString()}
+                          </div>
                         </div>
+
+                        <div className="newsActions">
                           <VoteButtons
                             section="NEWS"
                             itemId={n.itemId}
                             myVote={n.myVote}
                             onChangeVote={(next) => setItemVote("NEWS", n.itemId, next)}
                           />
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </Card>
+            )}
           </div>
 
           {/* Right: stacked */}
           <div className="vstack stickyCol">
+            {enabled.has("prices") && (
             <Card title="Coin Prices" className="card-strong">
               <div className="muted" style={{ marginBottom: 10 }}>
                 Quick snapshot (USD)
@@ -214,8 +239,10 @@ export default function DashboardPage() {
                 </div>
               )}
             </Card>
+            )}
 
-            <Card title="AI Insight" className="card-strong">
+            {enabled.has("insight") && (
+            <Card title="Daily Insight" className="card-strong">
               <div className="muted" style={{ marginBottom: 10 }}>
                 A short, actionable daily takeaway
               </div>
@@ -234,8 +261,10 @@ export default function DashboardPage() {
                 </div>
               )}
             </Card>
+            )}
 
-            <Card title="Meme" className="card-strong">
+            {enabled.has("meme") && (
+            <Card title="Fun Meme" className="card-strong">
               <div className="muted" style={{ marginBottom: 10 }}>
                 Because markets are emotional 🙂
               </div>
@@ -258,6 +287,7 @@ export default function DashboardPage() {
                 </div>
               )}
             </Card>
+            )}
           </div>
         </div>
       </div>

@@ -1,9 +1,8 @@
 export type NewsItem = {
   itemId: string;
   title: string;
-  url: string;
-  source: string | null;
   publishedAt: string;
+  snippet?: string;
 };
 
 const baseUrl = "https://cryptopanic.com/api/developer/v2/posts/";
@@ -55,13 +54,17 @@ export async function fetchNews(coinIds: string[], limit = 10): Promise<NewsItem
   }
 
   const json = (await res.json()) as any;
-
   const results = Array.isArray(json?.results) ? json.results : [];
+  console.log("sample post:", results[0]);
+  console.log("raw keys:", Object.keys(json ?? {}));
+  console.log("raw first result keys:", Object.keys(results?.[0] ?? {}));
+  console.log("raw first result:", JSON.stringify(results?.[0] ?? {}, null, 2));
+
+
   return results.slice(0, limit).map((p: any) => ({
-    itemId: `news:${String(p.id)}`,
-    title: String(p.title ?? ""),
-    url: String(p.url ?? ""),
-    source: p?.source?.title ? String(p.source.title) : null,
-    publishedAt: String(p.published_at ?? new Date().toISOString()),
+  itemId: `news:${String(p.id ?? p.slug ?? Math.random())}`,
+  title: String(p.title ?? "Untitled"),
+  publishedAt: String(p.published_at ?? p.created_at ?? new Date().toISOString()),
+  snippet: p?.description,
   }));
 }

@@ -11,6 +11,7 @@ export type DashboardResponse = {
       url: string;
       source: string | null;
       publishedAt: string;
+      snippet?: string;
       myVote: 1 | -1 | null;
     }>;
     prices: Array<{

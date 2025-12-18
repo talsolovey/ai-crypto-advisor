@@ -64,6 +64,7 @@ export async function getDashboard(req: any, res: any) {
     url: string;
     source: string | null;
     publishedAt: string;
+    snippet?: string;
   }> = [];
 
   if (contentTypes.includes("news")) {
@@ -75,10 +76,19 @@ export async function getDashboard(req: any, res: any) {
       news = [
         {
           itemId: "news:fallback-1",
-          title: "Could not load live news right now.",
+          title: "Live news is temporarily unavailable (CryptoPanic 502).",
+          url: "https://cryptopanic.com/",
+          source: "CryptoPanic",
+          publishedAt: new Date().toISOString(),
+          snippet: "You can still browse headlines directly on CryptoPanic while we retry.",
+        },
+        {
+          itemId: "news:fallback-2",
+          title: "Open CryptoPanic news feed",
           url: "https://cryptopanic.com/",
           source: "fallback",
           publishedAt: new Date().toISOString(),
+          snippet: "Click to view the full feed in a new tab.",
         },
       ];
     }
@@ -114,6 +124,7 @@ export async function getDashboard(req: any, res: any) {
 
       } catch (e) {
         text = `AI insight unavailable right now. (Try again later)`;
+        console.error("Failed to generate insight:", e);
       }
 
       if(text != "AI insight unavailable right now. (Try again later)") {
