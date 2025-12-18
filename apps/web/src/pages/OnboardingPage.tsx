@@ -17,10 +17,10 @@ const ASSET_OPTIONS = [
 const INVESTOR_TYPES = ["HODLer", "Day Trader", "Long-term Investor", "Beginner"];
 
 const CONTENT_TYPES = [
-  { id: "news", label: "News" },
-  { id: "prices", label: "Prices" },
-  { id: "insight", label: "AI Insight" },
-  { id: "meme", label: "Meme" },
+  { id: "news", label: "Market News" },
+  { id: "prices", label: "Coin Prices" },
+  { id: "insight", label: "Daily Insights" },
+  { id: "meme", label: "Fun" },
 ];
 
 function toggleInArray(arr: string[], value: string) {
@@ -38,6 +38,8 @@ export default function OnboardingPage() {
   const [assets, setAssets] = useState<string[]>([]);
   const [investorType, setInvestorType] = useState<string>("");
   const [contentTypes, setContentTypes] = useState<string[]>([]);
+
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -72,6 +74,7 @@ export default function OnboardingPage() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setHasSubmitted(true);
     if (!canSubmit) return;
 
     setError(null);
@@ -91,88 +94,105 @@ export default function OnboardingPage() {
   if (loading) return <div className="container">Loading onboarding...</div>;
 
   return (
-    <div className="container">
-      <div className="card" style={{ marginBottom: 16 }}>
-        <div className="cardHeader">
-          <div>
-            <h1 className="cardTitle" style={{ fontSize: 22 }}>Personalize your dashboard</h1>
-            <div className="cardSubtitle">
-              Pick what you care about — we'll tailor news, prices, and insight around it.
+    <div className="page">
+      <div className="container">
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="cardHeader">
+            <div className="brand">
+              <div>
+                <h1 className="cardTitle" style={{ fontSize: 22 }}>
+                  Personalize your dashboard
+                </h1>
+              <div className="cardSubtitle">
+                Pick what you care about — we'll tailor news, prices, and insight around it.
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <form onSubmit={onSubmit} className="grid">
-        <div className="vstack">
-          <Card title="1) Favorite crypto assets">
-            <div className="muted" style={{ marginBottom: 10 }}>
-              Choose at least one asset for your watchlist.
-            </div>
-
-            <div className="list">
-              {ASSET_OPTIONS.map((opt) => (
-                <label key={opt.id} className="listItem" style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                  <input
-                    type="checkbox"
-                    checked={assets.includes(opt.id)}
-                    onChange={() => setAssets((prev) => toggleInArray(prev, opt.id))}
-                  />
-                  <span style={{ fontWeight: 650 }}>{opt.label}</span>
-                </label>
-              ))}
-            </div>
-
-            {assets.length === 0 && <div className="error" style={{ marginTop: 10 }}>Pick at least one asset.</div>}
-          </Card>
-
-          <Card title="2) Content types">
-            <div className="muted" style={{ marginBottom: 10 }}>
-              Decide what shows up on your dashboard.
-            </div>
-
-            <div className="list">
-              {CONTENT_TYPES.map((opt) => (
-                <label key={opt.id} className="listItem" style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                  <input
-                    type="checkbox"
-                    checked={contentTypes.includes(opt.id)}
-                    onChange={() => setContentTypes((prev) => toggleInArray(prev, opt.id))}
-                  />
-                  <span style={{ fontWeight: 650 }}>{opt.label}</span>
-                </label>
-              ))}
-            </div>
-
-            {contentTypes.length === 0 && <div className="error" style={{ marginTop: 10 }}>Pick at least one content type.</div>}
-          </Card>
-
-          <Card title="3) Investor type">
-            <div className="muted" style={{ marginBottom: 10 }}>
-              Used to tune the tone of insights.
-            </div>
-
-            <select
-              value={investorType}
-              onChange={(e) => setInvestorType(e.target.value)}
-              style={{ width: "100%" }}
-            >
-              <option value="">Select one...</option>
-              {INVESTOR_TYPES.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
-
-            {!investorType && <div className="error" style={{ marginTop: 10 }}>Choose an investor type.</div>}
-          </Card>
-
-          {error && <div className="error">{error}</div>}
-
-          <Button disabled={!canSubmit || saving} type="submit" variant="primary">
-            {saving ? "Saving..." : "Save & Continue"}
-          </Button>
         </div>
-      </form>
+
+        <form onSubmit={onSubmit} className="grid">
+          <div className="vstack">
+            <Card title="What crypto assets are you interested in?">
+              <div className="muted" style={{ marginBottom: 10 }}>
+                Choose at least one asset for your watchlist.
+              </div>
+
+              <div className="list">
+                {ASSET_OPTIONS.map((opt) => (
+                  <label
+                    key={opt.id}
+                    className={`listItem ${assets.includes(opt.id) ? "listItemSelected" : ""}`}
+                    style={{ display: "flex", gap: 10, alignItems: "center", cursor: "pointer" }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={assets.includes(opt.id)}
+                      onChange={() => setAssets((prev) => toggleInArray(prev, opt.id))}
+                    />
+                    <span style={{ fontWeight: 650 }}>{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+
+              {hasSubmitted && assets.length === 0 && <div className="error" style={{ marginTop: 10 }}>Pick at least one asset.</div>}
+            </Card>
+
+            <Card title="What type of investor are you?">
+              <div className="muted" style={{ marginBottom: 10 }}>
+                Used to tune the tone of insights.
+              </div>
+
+              <select
+                value={investorType}
+                onChange={(e) => setInvestorType(e.target.value)}
+                style={{ width: "100%" }}
+              >
+                <option value="">Select one...</option>
+                {INVESTOR_TYPES.map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+
+              {hasSubmitted && !investorType && <div className="error" style={{ marginTop: 10 }}>Choose an investor type.</div>}
+            </Card>
+
+            <Card title="What kind of content would you like to see?">
+              <div className="muted" style={{ marginBottom: 10 }}>
+                Decide what shows up on your dashboard.
+              </div>
+
+              <div className="list">
+                {CONTENT_TYPES.map((opt) => (
+                  <label
+                    key={opt.id}
+                    className={`listItem ${contentTypes.includes(opt.id) ? "listItemSelected" : ""}`}
+                    style={{ display: "flex", gap: 10, alignItems: "center", cursor: "pointer" }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={contentTypes.includes(opt.id)}
+                      onChange={() => setContentTypes((prev) => toggleInArray(prev, opt.id))}
+                    />
+                    <span style={{ fontWeight: 650 }}>{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+
+              {hasSubmitted && contentTypes.length === 0 && <div className="error" style={{ marginTop: 10 }}>Pick at least one content type.</div>}
+            </Card>
+
+            {error && <div className="error">{error}</div>}
+
+            <div className="onboardingFooter">
+              {error && <div className="error">{error}</div>}
+              <Button type="submit" variant="primary" disabled={saving}>
+                {saving ? "Saving..." : "Save & Continue"}
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

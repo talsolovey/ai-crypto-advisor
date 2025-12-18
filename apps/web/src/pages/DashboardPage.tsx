@@ -182,10 +182,6 @@ export default function DashboardPage() {
                 </div>
               )}
             </Card>
-
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button onClick={load} variant="primary">Refresh</Button>
-            </div>
           </div>
 
           {/* Right: stacked */}

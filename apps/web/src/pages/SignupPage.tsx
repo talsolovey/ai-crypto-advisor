@@ -33,72 +33,71 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="authShell">
-      <div className="card heroCard">
-        <div className="brand" style={{ marginBottom: 14 }}>
-          <div>
-            <div>AI Crypto Advisor</div>
+    <div className="page">
+      <div className="container">
+        <div className="authWrap">
+          <div className="card card-strong authHeaderCard">
+            <h1 className="authHeadline">Create your account</h1>
+            <p className="authLead">
+              Set your watchlist and content preferences once — then get a cleaner dashboard every day.
+            </p>
           </div>
+
+          <Card title="Sign up" className="card-strong">
+            <form onSubmit={onSubmit} className="formGrid">
+              <label className="formLabel">
+                <strong>Name</strong>
+                <input
+                  className="input"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  autoComplete="name"
+                  placeholder="Your Name"
+                />
+              </label>
+
+              <label className="formLabel">
+                <strong>Email</strong>
+                <input
+                  className="input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                />
+              </label>
+
+              <label className="formLabel">
+                <strong>Password</strong>
+                <input
+                  className="input"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  required
+                  autoComplete="new-password"
+                  minLength={6}
+                  placeholder="At least 6 characters"
+                />
+              </label>
+
+              {error && <div className="error">{error}</div>}
+
+              <Button disabled={loading} type="submit" variant="primary">
+                {loading ? "Creating account..." : "Create account"}
+              </Button>
+
+              <div className="authFooterRow muted">
+                <span>Already have an account?</span>
+                <Link to="/login">Log in</Link>
+              </div>
+            </form>
+          </Card>
         </div>
-
-        <h1 className="heroTitle">Create your account</h1>
-        <p className="heroLead">
-          Set your watchlist and content preferences once — then get a cleaner dashboard every day.
-        </p>
       </div>
-
-      <Card title="Sign up">
-        <form onSubmit={onSubmit} className="formGrid">
-          <label className="formLabel">
-            <strong>Name</strong>
-            <input
-              className="input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              autoComplete="name"
-              placeholder="Tal"
-            />
-          </label>
-
-          <label className="formLabel">
-            <strong>Email</strong>
-            <input
-              className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              required
-              autoComplete="email"
-              placeholder="you@example.com"
-            />
-          </label>
-
-          <label className="formLabel">
-            <strong>Password</strong>
-            <input
-              className="input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              required
-              autoComplete="new-password"
-              minLength={6}
-              placeholder="At least 6 characters"
-            />
-          </label>
-
-          {error && <div className="error">{error}</div>}
-
-          <Button disabled={loading} type="submit" variant="primary">
-            {loading ? "Creating account..." : "Create account"}
-          </Button>
-
-          <div className="muted" style={{ marginTop: 4 }}>
-            Already have an account? <Link to="/login">Log in</Link>
-          </div>
-        </form>
-      </Card>
     </div>
   );
 }

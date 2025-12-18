@@ -31,60 +31,60 @@ export default function LoginPage() {
     }
   }
 
+
   return (
-    <div className="authShell">
-      <div className="card heroCard">
-        <div className="brand" style={{ marginBottom: 14 }}>
-          <div>
-            <div>AI Crypto Advisor</div>
+    <div className="page">
+      <div className="container">
+        <div className="authWrap">
+          <div className="card card-strong authHeaderCard">
+
+            <h1 className="authHeadline">Welcome back</h1>
+            <p className="authLead">
+              Log in to see tailored news, prices, and a daily AI insight based on your preferences.
+            </p>
           </div>
+
+          <Card title="Log in" className="card-strong">
+            <form onSubmit={onSubmit} className="formGrid">
+              <label className="formLabel">
+                <strong>Email</strong>
+                <input
+                  className="input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  autoComplete="email"
+                  required
+                  placeholder="you@example.com"
+                />
+              </label>
+
+              <label className="formLabel">
+                <strong>Password</strong>
+                <input
+                  className="input"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  placeholder="••••••••"
+                />
+              </label>
+              {error && <div className="error">{error}</div>}
+
+              <Button disabled={loading} type="submit" variant="primary">
+                {loading ? "Logging in..." : "Login"}
+              </Button>
+
+              <div className="authFooterRow muted">
+                <span>Don&apos;t have an account?</span>
+                <Link to="/signup">Sign up</Link>
+              </div>
+            </form>
+          </Card>
         </div>
-
-        <h1 className="heroTitle">Welcome back</h1>
-        <p className="heroLead">
-          Clean dashboard. Tailored news. Daily AI insight. Vote to teach the feed what matters to you.
-        </p>
       </div>
-
-      <Card title="Log in">
-        <form onSubmit={onSubmit} className="formGrid">
-          <label className="formLabel">
-            <strong>Email</strong>
-            <input
-              className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              autoComplete="email"
-              required
-              placeholder="you@example.com"
-            />
-          </label>
-
-          <label className="formLabel">
-            <strong>Password</strong>
-            <input
-              className="input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              autoComplete="current-password"
-              required
-              placeholder="••••••••"
-            />
-          </label>
-
-          {error && <div className="error">{error}</div>}
-
-          <Button disabled={loading} type="submit" variant="primary">
-            {loading ? "Logging in..." : "Login"}
-          </Button>
-
-          <div className="muted" style={{ marginTop: 4 }}>
-            Don&apos;t have an account? <Link to="/signup">Sign up</Link>
-          </div>
-        </form>
-      </Card>
     </div>
   );
 }
