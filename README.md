@@ -7,8 +7,7 @@ The app learns about users through a short onboarding flow and then presents dai
 
 ## 🌐 Live Demo
 
-- **Frontend:** https://ai-crypto-advisor-flax.vercel.app/login
-- **Backend API:** https://ai-crypto-advisor-iyu2.onrender.com
+https://ai-crypto-advisor-flax.vercel.app
 
 > You can test the app by signing up with a new user account.
 
