@@ -234,7 +234,6 @@ export default function DashboardPage() {
 
           {/* Right: stacked */}
           <div className="vstack stickyCol">
-            {enabled.has("prices") && (
             <Card title="Coin Prices" className="card-strong">
               <div className="cardSubtitle" style={{ marginBottom: 10 }}>
                 Quick snapshot (USD)
@@ -263,7 +262,6 @@ export default function DashboardPage() {
                 </div>
               )}
             </Card>
-            )}
 
             {enabled.has("insight") && (
             <Card title="Daily Insight" className="card-strong">
